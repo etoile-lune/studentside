@@ -36,7 +36,7 @@ public slots:
     void slotReadyRead();//读
    void slotSendInfo();//发送查询信息
     void slotSendPass();//发送修改密码信息
-
+   void slotSendPic();
 
 
 
