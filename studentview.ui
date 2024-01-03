@@ -13,19 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="StuInfoBtn">
-   <property name="geometry">
-    <rect>
-     <x>640</x>
-     <y>260</y>
-     <width>81</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>个人信息查看</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="PasswordBtn">
    <property name="geometry">
     <rect>

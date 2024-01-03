@@ -15,7 +15,7 @@ StudentView::StudentView(QWidget *parent)
     server = new QTcpSocket(this);
     server->connectToHost(QHostAddress("127.0.0.1"),8000);
     connect(server ,&QTcpSocket::readyRead,this,&StudentView::slotReadyRead);
-    connect(ui->StuInfoBtn,&QPushButton::clicked,this,&StudentView::slotSendInfo);//请求查看信息
+   // connect(ui->StuInfoBtn,&QPushButton::clicked,this,&StudentView::slotSendInfo);//请求查看信息
     connect(ui->PasswordBtn,&QPushButton::clicked,this,&StudentView::slotSendPass);//修改密码
     connect(ui->addpictureBtn,&QPushButton::clicked,this,&StudentView::slotSendPic);
     slotSendInfo();
