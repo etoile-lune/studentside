@@ -55,7 +55,7 @@ void RepairView::slotReadyRead(){
     // 处理来自服务端的查询结果
     // 将结果显示在QTableView上
     QStandardItemModel *model = new QStandardItemModel();
-    QStringList headers = {"Num", "Phone", "Fault"};
+    QStringList headers = {"Num", "Phone", "Fault","State"};
     model->setHorizontalHeaderLabels(headers);//列标题
 
     QStringList records = result.split("$");//分隔符
@@ -63,8 +63,8 @@ void RepairView::slotReadyRead(){
     int row = 0;
     foreach (const QString &record, records) {// 遍历每条记录，分割字段并添加到model中
         QStringList fields = record.split(",");
-        if (fields.size() == 3) {
-            for (int column = 0; column < 3; ++column) {
+        if (fields.size() ==4 ) {
+            for (int column = 0; column < 4; ++column) {
                 model->setItem(row, column, new QStandardItem(fields.at(column)));
             }
             row++;

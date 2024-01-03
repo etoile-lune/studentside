@@ -18,6 +18,7 @@ StudentView::StudentView(QWidget *parent)
     connect(ui->StuInfoBtn,&QPushButton::clicked,this,&StudentView::slotSendInfo);//请求查看信息
     connect(ui->PasswordBtn,&QPushButton::clicked,this,&StudentView::slotSendPass);//修改密码
     connect(ui->addpictureBtn,&QPushButton::clicked,this,&StudentView::slotSendPic);
+    slotSendInfo();
 }
 
 StudentView::~StudentView()
@@ -38,7 +39,7 @@ void StudentView::on_ReturnwinBtn_clicked()
 
 
 void StudentView::slotReadyRead(){
-   // QByteArray array = server->readAll();
+
     QString array = server->readAll();
     if (array.startsWith("ID:")){//查看信息
        //qDebug()<<array;
@@ -59,7 +60,7 @@ void StudentView::slotReadyRead(){
 
         QByteArray imageData = QByteArray::fromBase64(dataList[9].mid(9).toUtf8());
         qDebug()<<imageData;
-        //QByteArray binaryData = QByteArray::fromBase64(imageData);
+
         // 创建QImage并加载图片数据
         QImage image;
         image.loadFromData(imageData);
@@ -114,7 +115,7 @@ void StudentView::slotSendInfo(){
 }
 
 void StudentView::slotSendPic(){
-    ui->label->clear();
+    //ui->label->clear();
     QString fileName = QFileDialog::getOpenFileName(this, "Select Image", QDir::homePath(), "Images (*.png *.jpg)");
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)) {
@@ -127,5 +128,6 @@ void StudentView::slotSendPic(){
 
         file.close();
     }
+    slotSendInfo();
 }
 
