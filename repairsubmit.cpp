@@ -6,6 +6,7 @@
 #include<QDebug>
 #include<QMessageBox>
 #include <QtSql>
+#include <QDateTime>
 RepairSubmit::RepairSubmit(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::RepairSubmit)
@@ -57,12 +58,16 @@ void RepairSubmit::slotReadyRead(){
 }
 
 void RepairSubmit::slotSendNum(){
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    QString repairtime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
+    QString repairtype = ui->comboBox->currentText();
     QString num = ui->RepairNum->text();
     QString phone = ui->Repairphone->text();
     QString fault = ui->RepairFault->toPlainText();
+
     if(num!="" &&phone != "" && fault!=""){
 
-    QString data = "NUM:" + num + "$" + phone + "$" + fault; // 在数据前面添加"NUM:"作为数据类型标识
+    QString data = "NUM:" + num + "$"  + repairtype + "$" + fault + "$" + phone + "$"  + repairtime ; // 在数据前面添加"NUM:"作为数据类型标识
     server->write(data.toUtf8());
 
     ui->RepairNum->clear();

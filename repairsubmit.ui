@@ -43,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>130</x>
-     <y>190</y>
+     <y>250</y>
      <width>71</width>
      <height>20</height>
     </rect>
@@ -102,10 +102,48 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>190</y>
+     <y>250</y>
      <width>281</width>
      <height>51</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>188</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>网络故障报修</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>校园卡故障报修</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>宿舍设施故障报修</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>190</y>
+     <width>41</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>故障类型</string>
    </property>
   </widget>
  </widget>

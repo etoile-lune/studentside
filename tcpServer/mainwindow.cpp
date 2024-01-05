@@ -85,8 +85,10 @@ void MainWindow::readyRead(){
         QString data1 = data.mid(4);
         QStringList dataList = data1.split("$");
         QString num = dataList[0]; // 维修编号
-        QString phone = dataList[1]; // 电话号码
+        QString repairtype = dataList[1]; // 电话号码
         QString fault = dataList[2]; // 故障描述
+        QString phone = dataList[3]; // 电话号码
+        QString repairtime = dataList[4]; // 故障描述
         QString state = "待处理";        // 处理num、phone、fault的逻辑
         //if (connectdatabase("dormitory_manage_system.db")) {
             QSqlTableModel model(this);
@@ -96,8 +98,10 @@ void MainWindow::readyRead(){
             // 插入新记录
             QSqlRecord record = model.record(); // 创建一个空记录
             record.setValue("num", num); // 设置num字段的值
+            record.setValue("repairtype", repairtype); // 设置phone字段的值
+            record.setValue("fault", fault);
             record.setValue("phone", phone); // 设置phone字段的值
-            record.setValue("fault", fault); // 设置fault字段的值
+            record.setValue("repairtime", repairtime); // 设置fault字段的值
             record.setValue("state", state);
             if (model.insertRecord(-1, record)) { // 在最后插入记录
                 if (model.submitAll()) {
@@ -131,11 +135,13 @@ void MainWindow::readyRead(){
             for (int i = 0; i < model.rowCount(); ++i) {
                 QSqlRecord record = model.record(i);
                 QString num = record.value("num").toString();
-                QString phone = record.value("phone").toString();
+                QString repairtype = record.value("repairtype").toString();
                 QString fault = record.value("fault").toString();
+                QString phone = record.value("phone").toString();
+                QString repairtime = record.value("repairtime").toString();
                 QString state = record.value("state").toString();
                     // 将查询结果拼接为字符串
-                resultData +=  num + "," + phone + "," + fault + "," + state + "$";
+                resultData +=  num + "," +repairtype + "," + fault + "," + phone + ","+repairtime + ","  + state + "$";
             }
         } else {
             resultData = "No records found" ;
