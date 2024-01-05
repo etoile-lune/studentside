@@ -22,7 +22,7 @@ class RepairSubmit : public QMainWindow
 public:
     explicit RepairSubmit(QWidget *parent = nullptr);
     ~RepairSubmit();
-    bool connectdatabase(const QString &dbName);//连接数据库
+    //bool connectdatabase(const QString &dbName);//连接数据库
 
 private slots:
 

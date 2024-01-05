@@ -186,7 +186,7 @@ void MainWindow::readyRead(){
             }
         }
     }else if(array.startsWith("PIC:")){
-        qDebug()<<array;
+        //qDebug()<<array;
         QByteArray imageData = array.mid(4).toBase64();  // 从数据中提取图片数据部分
          QSqlTableModel model;
          model.setTable("studentinfo");
@@ -204,7 +204,7 @@ void MainWindow::readyRead(){
         m_client->disconnectFromHost();
     }
 
-    // 断开客户端连接
+
 }
 
 

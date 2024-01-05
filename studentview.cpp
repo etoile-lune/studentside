@@ -15,7 +15,7 @@ StudentView::StudentView(QWidget *parent)
     server = new QTcpSocket(this);
     server->connectToHost(QHostAddress("127.0.0.1"),8000);
     connect(server ,&QTcpSocket::readyRead,this,&StudentView::slotReadyRead);
-   // connect(ui->StuInfoBtn,&QPushButton::clicked,this,&StudentView::slotSendInfo);//请求查看信息
+
     connect(ui->PasswordBtn,&QPushButton::clicked,this,&StudentView::slotSendPass);//修改密码
     connect(ui->addpictureBtn,&QPushButton::clicked,this,&StudentView::slotSendPic);
     slotSendInfo();
@@ -44,9 +44,7 @@ void StudentView::slotReadyRead(){
     if (array.startsWith("ID:")){//查看信息
        //qDebug()<<array;
        QStringList dataList = array.split(", ");
-       foreach(QString item, dataList) {
-           qDebug() << item;
-       }
+
        ui->idlabel->setText(dataList[0]);
        ui->namelabel->setText(dataList[1]);
        ui->sexlabel->setText(dataList[2]);
@@ -59,7 +57,7 @@ void StudentView::slotReadyRead(){
 
 
         QByteArray imageData = QByteArray::fromBase64(dataList[9].mid(9).toUtf8());
-        qDebug()<<imageData;
+        //qDebug()<<imageData;
 
         // 创建QImage并加载图片数据
         QImage image;
@@ -120,11 +118,20 @@ void StudentView::slotSendPic(){
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly)) {
         QByteArray imageData = file.readAll();
-        qDebug()<<imageData;
+        QImage originalImage;
+        originalImage.loadFromData(imageData);
 
+        QSize newSize(800, 600); // 指定新的大小
+        QImage scaledImage = originalImage.scaled(newSize, Qt::KeepAspectRatio); // 压缩图片到指定大小，保持原始图片的宽高比
+
+        QByteArray compressedData;
+        QBuffer buffer(&compressedData);
+        buffer.open(QIODevice::WriteOnly);
+        scaledImage.save(&buffer, "JPEG", 50);
+        buffer.close();
 
         QString data = "PIC:";
-        server->write(data.toUtf8()+imageData);
+        server->write(data.toUtf8()+compressedData);
 
         file.close();
     }
