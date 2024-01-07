@@ -10,6 +10,8 @@
 #include<QDebug>
 #include <QTcpSocket>
 #include <QByteArray>
+#include "studentlogin.h"
+#include"socketmanager.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class RepairView; }
 QT_END_NAMESPACE
@@ -32,7 +34,7 @@ private slots:
         void on_ReturnwinBtn_clicked();//返回
 
 public slots:
-    void slotReadyRead();//读服务端数据
+    void slotReadyRead(QByteArray);//读服务端数据
     void slotSendNumView();//发送数据
 
 };

@@ -13,6 +13,7 @@ SOURCES += \
     main.cpp \
     repairsubmit.cpp \
     repairview.cpp \
+    socketmanager.cpp \
     studentlogin.cpp \
     studentview.cpp \
     studentwindow.cpp
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     repairsubmit.h \
     repairview.h \
+    socketmanager.h \
     studentlogin.h \
     studentview.h \
     studentwindow.h

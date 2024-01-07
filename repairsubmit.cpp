@@ -12,9 +12,8 @@ RepairSubmit::RepairSubmit(QWidget *parent)
     , ui(new Ui::RepairSubmit)
 {
     ui->setupUi(this);
-    server = new QTcpSocket(this);
-    server->connectToHost(QHostAddress("127.0.0.1"),8000);
-    connect(server ,&QTcpSocket::readyRead,this,&RepairSubmit::slotReadyRead);//接收消息
+    server = SocketManager::instance().socket();
+    connect(&SocketManager::instance(),&SocketManager::repairSubmitSuccess,this,&RepairSubmit::slotReadyRead);//接收消息
     connect(ui->SubmitBtn,&QPushButton::clicked,this,&RepairSubmit::slotSendNum);//提交
 
 }
@@ -26,8 +25,6 @@ RepairSubmit::~RepairSubmit()
 
 
 
-
-
 void RepairSubmit::on_WindowBtn_clicked()//返回
 {
     StudentWindow *windowwin=new StudentWindow;
@@ -36,10 +33,9 @@ void RepairSubmit::on_WindowBtn_clicked()//返回
 }
 
 
-void RepairSubmit::slotReadyRead(){
-    QByteArray array = server->readAll();//接收数据
-    //qDebug()<<array;
-    if (array == "insertsuccess"){
+void RepairSubmit::slotReadyRead(QByteArray array){
+    qDebug()<<array;
+    if (array == "RepairSubmit:insertsuccess"){
         QString dlgTitle="success";
         QString strInfo="提交成功!";
         QMessageBox::information(this,dlgTitle,strInfo);
@@ -47,7 +43,7 @@ void RepairSubmit::slotReadyRead(){
         stuwin->show();
         this->close();
     }
-    else if (array =="invalid"){
+    else if (array =="RepairSubmit:invalid"){
         QString dlgTitle="error";
         QString strInfo="提交失败!";
         QMessageBox::critical(this,dlgTitle,strInfo);

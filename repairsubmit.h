@@ -11,6 +11,8 @@
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QByteArray>
+#include "studentlogin.h"
+#include"SocketManager.h"
 namespace Ui {
 class RepairSubmit;
 }
@@ -25,11 +27,8 @@ public:
     //bool connectdatabase(const QString &dbName);//连接数据库
 
 private slots:
-
     void on_WindowBtn_clicked();//返回
-
-
-    void slotReadyRead();//读服务端来的数据
+    void slotReadyRead(QByteArray);//读服务端来的数据
     void slotSendNum();//发送信息
 
 private:

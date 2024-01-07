@@ -11,6 +11,7 @@
 #include<QDebug>
 #include <QTcpSocket>
 #include <QByteArray>
+#include"SocketManager.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class StudentLogin; }
 QT_END_NAMESPACE
@@ -27,13 +28,15 @@ public:
 private:
     Ui::StudentLogin *ui;
     QSqlTableModel *model;
-
     QTcpSocket* server;
 
 
+
+
 public slots:
-    void slotReadyRead();//读
+    void slotReadyRead(QByteArray);//读
     void slotSendId();//发
+
 
 
 

@@ -18,9 +18,8 @@ RepairView::RepairView(QWidget *parent)
     , ui(new Ui::RepairView)
 {
     ui->setupUi(this);
-    server = new QTcpSocket(this);
-    server->connectToHost(QHostAddress("127.0.0.1"),8000);
-    connect(server ,&QTcpSocket::readyRead,this,&RepairView::slotReadyRead);
+    server = SocketManager::instance().socket();
+    connect(&SocketManager::instance() ,&SocketManager::repairResult,this,&RepairView::slotReadyRead);
     connect(ui->DornumviewBtn,&QPushButton::clicked,this,&RepairView::slotSendNumView);
 }
 
@@ -44,14 +43,14 @@ void RepairView::slotSendNumView(){
 
 
 }
-void RepairView::slotReadyRead(){
-    QByteArray array = server->readAll();
+void RepairView::slotReadyRead(QByteArray array){
     qDebug() << array;
     QString result = QString::fromUtf8(array);
-    if (result == "No records found") {
+    if (result == "RepairResult,No records found") {
         QMessageBox::critical(this, "Query Failed", "No records found for the specified query.");
         return;
     }
+
     // 处理来自服务端的查询结果
     // 将结果显示在QTableView上
     QStandardItemModel *model = new QStandardItemModel();
@@ -63,8 +62,8 @@ void RepairView::slotReadyRead(){
     int row = 0;
     foreach (const QString &record, records) {// 遍历每条记录，分割字段并添加到model中
         QStringList fields = record.split(",");
-        if (fields.size() ==6 ) {
-            for (int column = 0; column < 6; ++column) {
+        if (fields.size() ==7 ) {
+            for (int column = 1; column < 7; ++column) {
                 model->setItem(row, column, new QStandardItem(fields.at(column)));
             }
             row++;

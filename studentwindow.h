@@ -10,7 +10,7 @@
 #include<QDebug>
 #include <QTcpSocket>
 #include <QByteArray>
-
+#include "studentlogin.h"
 #include <QMainWindow>
 
 namespace Ui {

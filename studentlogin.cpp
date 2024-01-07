@@ -13,9 +13,8 @@ StudentLogin::StudentLogin(QWidget *parent)
     , ui(new Ui::StudentLogin)
 {
     ui->setupUi(this);
-    server = new QTcpSocket(this);
-    server->connectToHost(QHostAddress("127.0.0.1"),8000);
-    connect(server ,&QTcpSocket::readyRead,this,&StudentLogin::slotReadyRead);
+    server = SocketManager::instance().socket();
+    connect(&SocketManager::instance(),&SocketManager::loginSuccess,this,&StudentLogin::slotReadyRead);//建立槽函数的连接
     connect(ui->LoginButton,&QPushButton::clicked,this,&StudentLogin::slotSendId);//登录
 
 }
@@ -23,25 +22,24 @@ StudentLogin::StudentLogin(QWidget *parent)
 
 StudentLogin::~StudentLogin()
 {
+    //disconnect(server ,&QTcpSocket::readyRead,this,&StudentLogin::slotReadyRead);//建立槽函数的连接
     delete ui;
 }
 
-void StudentLogin::slotReadyRead(){
-    QByteArray array = server->readAll();
+void StudentLogin::slotReadyRead(QByteArray array){
 
+    qDebug()<<array;
     //qDebug()<<array;
-    if (array == "ok"){//登陆成功
+    if (array == "Login:ok"){//登陆成功
             StudentWindow *stuwin=new StudentWindow;
             stuwin->show();
             this->close();
+            //QMessageBox::information(this,"消息","登录成功！",QMessageBox::Ok);
         }
-    else if (array =="invalid"){
+    else if (array =="Login:invalid"){
         QString dlgTitle="error";
         QString strInfo="账号或密码错误!";
         QMessageBox::critical(this,dlgTitle,strInfo);
-        StudentLogin *stulogwin=new StudentLogin;
-        stulogwin->show();
-        this->close();
     }
 }
 void StudentLogin::slotSendId(){
@@ -51,7 +49,7 @@ void StudentLogin::slotSendId(){
 
         QString data = "ID:" + id + " " + password ;//添加标识符
         server->write(data.toUtf8());
-
+        qDebug()<<server->state();
         ui->UserNameLineEdit->clear();
         ui->PasswordLineEdit->clear();
     }else{
@@ -67,4 +65,6 @@ void StudentLogin::slotSendId(){
     }
     }
 }
+
+
 

@@ -11,6 +11,7 @@
 #include<QDebug>
 #include <QTcpSocket>
 #include <QByteArray>
+#include"studentlogin.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class StudentView; }
 QT_END_NAMESPACE
@@ -33,7 +34,7 @@ private slots:
     void on_ReturnwinBtn_clicked();//返回
 
 public slots:
-    void slotReadyRead();//读
+    void slotReadyRead(QByteArray);//读
    void slotSendInfo();//发送查询信息
     void slotSendPass();//发送修改密码信息
    void slotSendPic();

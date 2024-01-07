@@ -7,22 +7,25 @@
 #include<QMessageBox>
 #include <QtSql>
 #include <QFileDialog>
+
 StudentView::StudentView(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::StudentView)
 {
     ui->setupUi(this);
-    server = new QTcpSocket(this);
-    server->connectToHost(QHostAddress("127.0.0.1"),8000);
-    connect(server ,&QTcpSocket::readyRead,this,&StudentView::slotReadyRead);
-
+    server=SocketManager::instance().socket();
+    connect(&SocketManager::instance(),&SocketManager::studentInfo,this,&StudentView::slotReadyRead);
+    connect(&SocketManager::instance(),&SocketManager::passwordModify,this,&StudentView::slotReadyRead);
+    connect(&SocketManager::instance(),&SocketManager::pictureModify,this,&StudentView::slotSendInfo);
     connect(ui->PasswordBtn,&QPushButton::clicked,this,&StudentView::slotSendPass);//修改密码
-    connect(ui->addpictureBtn,&QPushButton::clicked,this,&StudentView::slotSendPic);
+    connect(ui->addpictureBtn,&QPushButton::clicked,this,&StudentView::slotSendPic);//发送图片
     slotSendInfo();
 }
 
 StudentView::~StudentView()
 {
+    //disconnect(server,&QTcpSocket::readyRead,this,&StudentView::slotReadyRead);
+
     delete ui;
 }
 
@@ -37,14 +40,14 @@ void StudentView::on_ReturnwinBtn_clicked()
     delete this;
 }
 
+//从服务端到来的个人信息、修改成功、修改失败
+void StudentView::slotReadyRead(QByteArray array){
 
-void StudentView::slotReadyRead(){
+    QString tmp_array=QString::fromUtf8(array);//转化为字符串类型
+    qDebug()<<array;
+    if (array.startsWith("ID: ")){//查看信息
 
-    QString array = server->readAll();
-    if (array.startsWith("ID:")){//查看信息
-       //qDebug()<<array;
-       QStringList dataList = array.split(", ");
-
+       QStringList dataList = tmp_array.split(", ");
        ui->idlabel->setText(dataList[0]);
        ui->namelabel->setText(dataList[1]);
        ui->sexlabel->setText(dataList[2]);
@@ -54,7 +57,6 @@ void StudentView::slotReadyRead(){
        ui->phonelabel->setText(dataList[6]);
        ui->roomlabel->setText(dataList[7]);
        ui->bedlabel->setText(dataList[8]);
-
 
         QByteArray imageData = QByteArray::fromBase64(dataList[9].mid(9).toUtf8());
         //qDebug()<<imageData;
@@ -89,6 +91,7 @@ void StudentView::slotReadyRead(){
 
 }
 
+//修改密码按钮
 void StudentView::slotSendPass(){
     QString password = ui->PasswordlineEdit->text();
     if(ui->PasswordlineEdit->text()!=""){
@@ -105,6 +108,7 @@ void StudentView::slotSendPass(){
     }
 }
 
+
 void StudentView::slotSendInfo(){
 
     QString data = "Infoview" ;
@@ -112,6 +116,7 @@ void StudentView::slotSendInfo(){
 
 }
 
+//添加图片按钮
 void StudentView::slotSendPic(){
     //ui->label->clear();
     QString fileName = QFileDialog::getOpenFileName(this, "Select Image", QDir::homePath(), "Images (*.png *.jpg)");
@@ -135,6 +140,6 @@ void StudentView::slotSendPic(){
 
         file.close();
     }
-    slotSendInfo();
+    //slotSendInfo();
 }
 
