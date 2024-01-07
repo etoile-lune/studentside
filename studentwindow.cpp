@@ -27,13 +27,11 @@ StudentWindow::~StudentWindow()
 
 
 
-void StudentWindow::on_ReturnLoginBtn_clicked()//返回
+void StudentWindow::on_ReturnLoginBtn_clicked() // 返回
 {
-    StudentLogin *loginwin=new StudentLogin;
-    loginwin->show();
-    delete this;
+    StudentLogin::instance().show(); // 通过单例模式获取StudentLogin实例并显示
+    this->close(); // 关闭当前窗口
 }
-
 
 void StudentWindow::on_RepairBtn_clicked()//报修
 {

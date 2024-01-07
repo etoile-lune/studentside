@@ -44,8 +44,9 @@ void RepairView::slotSendNumView(){
 
 }
 void RepairView::slotReadyRead(QByteArray array){
-    qDebug() << array;
-    QString result = QString::fromUtf8(array);
+
+    QString tmp = QString::fromUtf8(array);
+     QString result = tmp.mid(13);
     if (result == "RepairResult,No records found") {
         QMessageBox::critical(this, "Query Failed", "No records found for the specified query.");
         return;
@@ -56,14 +57,15 @@ void RepairView::slotReadyRead(QByteArray array){
     QStandardItemModel *model = new QStandardItemModel();
     QStringList headers = {"Num", "RepairType","Fault","Phone", "RepairTime","State"};
     model->setHorizontalHeaderLabels(headers);//列标题
-
+    qDebug()<<result;
     QStringList records = result.split("$");//分隔符
     model->removeRows(0, model->rowCount()); // 清除之前的数据
     int row = 0;
     foreach (const QString &record, records) {// 遍历每条记录，分割字段并添加到model中
         QStringList fields = record.split(",");
-        if (fields.size() ==7 ) {
-            for (int column = 1; column < 7; ++column) {
+
+        if (fields.size() ==6 ) {
+            for (int column = 0; column < 6; ++column) {
                 model->setItem(row, column, new QStandardItem(fields.at(column)));
             }
             row++;

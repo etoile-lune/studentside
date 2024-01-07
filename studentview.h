@@ -23,7 +23,7 @@ class StudentView : public QWidget
 public:
     StudentView(QWidget *parent = nullptr);
     ~StudentView();
-    //bool connectdatabase(const QString &dbName);
+
 
 private:
     Ui::StudentView *ui;

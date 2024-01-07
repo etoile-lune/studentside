@@ -9,10 +9,12 @@ void SocketManager::connectServe(){
 
 void SocketManager::readyRead(){
     QByteArray array=server.readAll();
-    qDebug()<<array;
+    server.flush();
+    //qDebug()<<array;
     if(array.startsWith("RepairSubmit")){
         emit(repairSubmitSuccess(array));//报修提交信号
     }else if(array.startsWith("Login")){
+        qDebug()<<array;
         emit(loginSuccess(array));//登录成功信号
     }else if(array.startsWith("RepairResult")){
         emit(repairResult(array));//发送报修结果信号

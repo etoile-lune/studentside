@@ -8,28 +8,49 @@
 #include <QtSql>
 #include <QHostAddress>
 #include<QMessageBox>
+// StudentLogin::StudentLogin(QWidget *parent)
+//     : QWidget(parent)
+//     , ui(new Ui::StudentLogin)
+// {
+//     ui->setupUi(this);
+//     server = SocketManager::instance().socket();
+//     connect(&SocketManager::instance(),&SocketManager::loginSuccess,this,&StudentLogin::slotReadyRead);//建立槽函数的连接
+//     connect(ui->LoginButton,&QPushButton::clicked,this,&StudentLogin::slotSendId);//登录
+
+// }
+
+
+// StudentLogin::~StudentLogin()
+// {
+//     //disconnect(&SocketManager::instance(),&SocketManager::loginSuccess,this,&StudentLogin::slotReadyRead);//断开槽函数的连接
+//     delete ui;
+// }
+#include "studentlogin.h"
+
 StudentLogin::StudentLogin(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::StudentLogin)
 {
     ui->setupUi(this);
     server = SocketManager::instance().socket();
-    connect(&SocketManager::instance(),&SocketManager::loginSuccess,this,&StudentLogin::slotReadyRead);//建立槽函数的连接
-    connect(ui->LoginButton,&QPushButton::clicked,this,&StudentLogin::slotSendId);//登录
-
+    connect(&SocketManager::instance(), &SocketManager::loginSuccess, this, &StudentLogin::slotReadyRead); // 建立槽函数的连接
+    connect(ui->LoginButton, &QPushButton::clicked, this, &StudentLogin::slotSendId); // 登录
 }
-
 
 StudentLogin::~StudentLogin()
 {
-    //disconnect(server ,&QTcpSocket::readyRead,this,&StudentLogin::slotReadyRead);//建立槽函数的连接
     delete ui;
 }
 
+StudentLogin& StudentLogin::instance()
+{
+    static StudentLogin instance; // 静态局部变量确保只被创建一次
+    return instance;
+}
 void StudentLogin::slotReadyRead(QByteArray array){
 
-    qDebug()<<array;
-    //qDebug()<<array;
+
+    qDebug()<<array<<"www";
     if (array == "Login:ok"){//登陆成功
             StudentWindow *stuwin=new StudentWindow;
             stuwin->show();
