@@ -18,6 +18,16 @@ RepairView::RepairView(QWidget *parent)
     , ui(new Ui::RepairView)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/6.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
     server = SocketManager::instance().socket();
     connect(&SocketManager::instance() ,&SocketManager::repairResult,this,&RepairView::slotReadyRead);
     connect(ui->DornumviewBtn,&QPushButton::clicked,this,&RepairView::slotSendNumView);

@@ -32,6 +32,18 @@ StudentLogin::StudentLogin(QWidget *parent)
     , ui(new Ui::StudentLogin)
 {
     ui->setupUi(this);
+
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/6.JPG");
+
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
     server = SocketManager::instance().socket();
     connect(&SocketManager::instance(), &SocketManager::loginSuccess, this, &StudentLogin::slotReadyRead); // 建立槽函数的连接
     connect(ui->LoginButton, &QPushButton::clicked, this, &StudentLogin::slotSendId); // 登录

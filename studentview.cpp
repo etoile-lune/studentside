@@ -13,6 +13,17 @@ StudentView::StudentView(QWidget *parent)
     , ui(new Ui::StudentView)
 {
     ui->setupUi(this);
+
+    this->setFixedSize(800,600);
+
+    QPixmap backgroundImage(":/picture/6.JPG");
+    backgroundImage = backgroundImage.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Window, backgroundImage);
+
+    this->setAutoFillBackground(true);
+
+    this->setPalette(palette);
     server=SocketManager::instance().socket();
     connect(&SocketManager::instance(),&SocketManager::studentInfo,this,&StudentView::slotReadyRead);
     connect(&SocketManager::instance(),&SocketManager::passwordModify,this,&StudentView::slotReadyRead);
@@ -64,8 +75,8 @@ void StudentView::slotReadyRead(QByteArray array){
         // 创建QImage并加载图片数据
         QImage image;
         image.loadFromData(imageData);
-        QSize newSize(100, 100);  // 新的大小
-        image = image.scaled(newSize, Qt::KeepAspectRatio);
+        //QSize newSize(100, 100);  // 新的大小
+        //image = image.scaled(newSize, Qt::KeepAspectRatio);
 
         //将缩放后的图像设置到QLabel中
         ui->label->setPixmap(QPixmap::fromImage(image));
