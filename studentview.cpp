@@ -105,18 +105,18 @@ void StudentView::slotReadyRead(QByteArray array){
 //修改密码按钮
 void StudentView::slotSendPass(){
     QString password = ui->PasswordlineEdit->text();
-    if(ui->PasswordlineEdit->text()!=""){
+    if(ui->PasswordlineEdit->text()==""||ui->PasswordlineEdit->text().contains(" ")){
+        QString dlgTitle="error";
+        QString strInfo="密码为空或者包含空格!";
+        QMessageBox::critical(this,dlgTitle,strInfo);
+
+    }
+    else{
         QString password = ui->PasswordlineEdit->text();
         QString data = "PASS:" + password;
         server->write(data.toUtf8());
-
-        ui->PasswordlineEdit->clear();
     }
-    else{
-        QString dlgTitle="error";
-        QString strInfo="请输入密码!";
-        QMessageBox::critical(this,dlgTitle,strInfo);   
-    }
+    ui->PasswordlineEdit->clear();
 }
 
 
